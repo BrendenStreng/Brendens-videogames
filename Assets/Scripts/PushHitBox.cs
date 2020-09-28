@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class PushHitBox : MonoBehaviour
 {
-    [SerializeField] float hPushForce = 10f;
-    [SerializeField] float vPushForce = 10f;
+    [SerializeField] float hPushForce = .05f;
+    [SerializeField] float vPushForce = .05f;
+    [SerializeField] GameObject player;
+
+    private float pushForceMultiplier;
+
+    Transform playerPosition;
+
+    //direction of push
+    Vector3 direction;
+
+    private void Start()
+    {
+        player = GameObject.Find("Third_Person_Player");
+    }
 
     //on collision with interactable objects apply a force to those obje
     private void OnTriggerEnter(Collider collision)
@@ -14,9 +27,14 @@ public class PushHitBox : MonoBehaviour
         {
             Rigidbody _rb = collision.gameObject.GetComponent<Rigidbody>();
 
-         
-            _rb.AddForce(collision.gameObject.transform.forward * hPushForce);
-            _rb.AddForce(collision.gameObject.transform.up * vPushForce);
+            playerPosition = player.GetComponent<Transform>();
+            ThirdPersonMovement playerController = player.GetComponent<ThirdPersonMovement>();
+
+            //calculate the direction of the pushc
+            direction = collision.gameObject.transform.position - playerPosition.position;
+
+            _rb.AddForce(collision.gameObject.transform.up.normalized * vPushForce * playerController.currentPushStrength);
+            _rb.AddRelativeForce(direction.normalized * hPushForce * playerController.currentPushStrength);
         }
     }
 }

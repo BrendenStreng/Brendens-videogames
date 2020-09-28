@@ -7,8 +7,8 @@ public class PlayerCharacterAnimator : MonoBehaviour
 {
 
     [SerializeField] ThirdPersonMovement _thirdPersonMovement = null;
+    [SerializeField] Health _health = null;
     [SerializeField] Player _player = null;
-    [SerializeField] GroundCheck _groundCheck = null;
 
     //names align with animator nodes
     const string IdleState = "Idle";
@@ -18,6 +18,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
     const string LandState = "FallingToLanding";
     const string SprintState = "Sprinting";
     const string PushState = "PushAbilityActivate";
+    const string DyingState = "Dying";
 
     Animator _animator = null;
 
@@ -61,6 +62,11 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _animator.CrossFadeInFixedTime(PushState, .2f);
     }
 
+    private void OnDeath()
+    {
+        _animator.CrossFadeInFixedTime(DyingState, .2f);
+    }
+
     private void OnEnable()
     {
         _thirdPersonMovement.Idle += OnIdle;
@@ -70,6 +76,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _thirdPersonMovement.Landing += OnLanding;
         _thirdPersonMovement.Sprinting += OnSprinting;
         _player.Pushing += OnPush;
+        _health.Dying += OnDeath;
     }
 
     private void OnDisable()
@@ -81,6 +88,7 @@ public class PlayerCharacterAnimator : MonoBehaviour
         _thirdPersonMovement.Landing -= OnLanding;
         _thirdPersonMovement.Sprinting -= OnSprinting;
         _player.Pushing -= OnPush;
+        _health.Dying -= OnDeath;
 
     }
 }

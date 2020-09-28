@@ -59,3 +59,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hPushForce: 1000
   vPushForce: 250
+  player: {fileID: 1169307307621005995, guid: 9e73c4919c36fa744923aea25a930e0c, type: 3}
